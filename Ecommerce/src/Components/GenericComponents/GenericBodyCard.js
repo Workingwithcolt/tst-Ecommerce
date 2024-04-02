@@ -15,7 +15,6 @@ const CurrentUser = ({ currentAuthContext }) => {
         [uid, CURRENTUSER],
         async () => await endpoints.users.getDocument(uid));
 
-
     if (data?.Access && (currentUserAdmin.name === '')) {
         setCurrentUserAdmin({
             currentUser: data,

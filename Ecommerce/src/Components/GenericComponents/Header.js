@@ -6,12 +6,16 @@ import { useContext, useState } from 'react';
 import { checkAdmin, getCartValue } from '../../Helper/helper';
 import { IoCartOutline } from "react-icons/io5";
 import { GenericModal } from './GenericModal';
+import { AuthContext } from '../../Auth';
 
 function Header() {
     const { pathname } = useLocation();
     const { currentUserAdmin, cart } = useContext(UserContext);
+    const currentAuthContext = useContext(AuthContext)
+    const uid = currentAuthContext?.currentUserObject?.uid
     const [showModal, setshowModal] = useState(false);
     var parsedValue = getCartValue()
+
     return (
         <nav className="bg-gray-900 border-gray-200 relative">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -30,7 +34,7 @@ function Header() {
                         </li>
                     </ul>
                     {
-                        currentUserAdmin.name !== ""
+                        uid
                         &&
                         <div
                             type="button"
