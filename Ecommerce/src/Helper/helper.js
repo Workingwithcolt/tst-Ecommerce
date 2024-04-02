@@ -10,6 +10,7 @@ export const ASSISTANT_LEVEL_ID = "AssistantLevelID";
 export const ACCEPTED = "accepted";
 export const PENDING = "pending";
 export const REJECTED = "Rejected";
+export const CURRENT_USER_ID = "currentUserId"
 
 
 export function deepCopyObject(fromObject) {

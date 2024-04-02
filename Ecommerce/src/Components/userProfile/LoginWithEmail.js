@@ -8,6 +8,7 @@ import ErrorFromFirebase from "../GenericComponents/FirebaseErrorMessage";
 import { AuthContext } from "../../Auth";
 import Button from "../GenericComponents/Button";
 import CheckCurrentUser from "./CheckCurrentUser";
+import { CURRENT_USER_ID } from "../../Helper/helper";
 
 export function LoginWithEmail() {
     const { setCurrentUser } = useContext(AuthContext);
@@ -19,6 +20,7 @@ export function LoginWithEmail() {
 
     const onAuthSuccess = async () => {
         setCurrentUser(auth.currentUser);
+        sessionStorage.setItem(CURRENT_USER_ID, JSON.stringify({ uid: auth.currentUser.uid }));
     }
 
     if (checkCurrent) {

@@ -3,18 +3,22 @@ import { SignOut } from '../userProfile/SignOut'
 import { FaUsersRays } from "react-icons/fa6";
 import { UserContext } from '../Contexts/CurrentUserContext';
 import { useContext, useState } from 'react';
-import { checkAdmin, getCartValue } from '../../Helper/helper';
+import { CURRENT_USER_ID, checkAdmin, getCartValue } from '../../Helper/helper';
 import { IoCartOutline } from "react-icons/io5";
 import { GenericModal } from './GenericModal';
 import { AuthContext } from '../../Auth';
 
 function Header() {
     const { pathname } = useLocation();
-    const { currentUserAdmin, cart } = useContext(UserContext);
-    const currentAuthContext = useContext(AuthContext)
-    const uid = currentAuthContext?.currentUserObject?.uid
     const [showModal, setshowModal] = useState(false);
     var parsedValue = getCartValue()
+    var currentUser = sessionStorage.getItem(CURRENT_USER_ID);
+
+    if (currentUser) {
+        currentUser = JSON.parse(currentUser)
+    } else {
+        currentUser = undefined;
+    }
 
     return (
         <nav className="bg-gray-900 border-gray-200 relative">
@@ -34,7 +38,7 @@ function Header() {
                         </li>
                     </ul>
                     {
-                        uid
+                        currentUser?.uid
                         &&
                         <div
                             type="button"
