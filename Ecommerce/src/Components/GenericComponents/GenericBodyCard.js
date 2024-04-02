@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { AuthContext } from '../../Auth';
@@ -24,7 +24,6 @@ const CurrentUser = ({ currentAuthContext }) => {
 
 }
 export default function GenericBodyCard({ children }) {
-    const [company, SelectCompany] = useState(undefined)
     const currentAuthContext = useContext(AuthContext)
 
     return (

@@ -1,12 +1,9 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { SignOut } from '../userProfile/SignOut'
-import { FaUsersRays } from "react-icons/fa6";
-import { UserContext } from '../Contexts/CurrentUserContext';
-import { useContext, useState } from 'react';
-import { CURRENT_USER_ID, checkAdmin, getCartValue } from '../../Helper/helper';
+import { useState } from 'react';
+import { CURRENT_USER_ID, getCartValue } from '../../Helper/helper';
 import { IoCartOutline } from "react-icons/io5";
 import { GenericModal } from './GenericModal';
-import { AuthContext } from '../../Auth';
 
 function Header() {
     const { pathname } = useLocation();

@@ -18,6 +18,7 @@ export const CardDashBoard = () => {
         isloading: false,
         data: []
     })
+
     const InvalidateCart = async () => {
         await queryClient.invalidateQueries({
             predicate: (query) =>
@@ -86,12 +87,12 @@ export const CardDashBoard = () => {
         queryFn: async () => await getCartElement(),
         queryKey: [uid, CART]
     })
+
     const deleteItem = async (id) => {
-        setStatus({
-            isloading: true,
-            data: []
-        })
+        setStatus({ isloading: true, data: [] })
+
         await endpoints.Cart.deleteDocument(`${id}`);
+
         InvalidateCart()
         setStatus({
             isloading: false,
