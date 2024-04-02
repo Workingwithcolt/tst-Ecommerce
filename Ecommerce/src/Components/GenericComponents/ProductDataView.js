@@ -1,6 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import LoadingSpinner from "./LoadingSpinner";
 import { useParams } from "react-router-dom";
 import { ItemCard } from "./ItemCard";
 import SHOP_DATA from "../../Helper/data";
@@ -47,7 +45,7 @@ function ProductDataView() {
                                 {
                                     data?.map((item, index) =>
                                         <div className="w-full" key={index} onClick={() => setSelectedItem(item)}>
-                                            <ItemCard item = {item} />
+                                            <ItemCard item={item} />
                                         </div>
                                     )
                                 }

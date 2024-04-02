@@ -1,12 +1,11 @@
 
 
-import { useContext, useReducer, useState } from "react";
+import { useContext, useState } from "react";
 import { auth } from "../../FirebaseHelpers/firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import LoadingSpinner from "../GenericComponents/LoadingSpinner";
 import ErrorFromFirebase from "../GenericComponents/FirebaseErrorMessage";
 import { AuthContext } from "../../Auth";
-import { useNavigate } from "react-router-dom";
 import Button from "../GenericComponents/Button";
 import CheckCurrentUser from "./CheckCurrentUser";
 
@@ -16,9 +15,7 @@ export function LoginWithEmail() {
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("")
     const [isLoading, setIsLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [checkCurrent, setCheckCurrent] = useState(true);
-    const navigate = useNavigate()
 
     const onAuthSuccess = async () => {
         setCurrentUser(auth.currentUser);
@@ -67,11 +64,6 @@ export function LoginWithEmail() {
 
     if (isLoading) {
         return <LoadingSpinner />
-    }
-    if (success) {
-        return <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Register Successfully</p>
-        </div>
     }
 
     return (

@@ -1,13 +1,10 @@
 
 
-import { useContext, useReducer, useState } from "react";
+import { useState } from "react";
 import { auth } from "../../FirebaseHelpers/firebase-config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import LoadingSpinner from "../GenericComponents/LoadingSpinner";
 import ErrorFromFirebase from "../GenericComponents/FirebaseErrorMessage";
-import { AuthContext } from "../../Auth";
-import CheckCurrentUser from "./CheckCurrentUser";
-import { useNavigate } from "react-router-dom";
 import Button from "../GenericComponents/Button";
 
 export function SignUpWithEmail() {
@@ -16,7 +13,6 @@ export function SignUpWithEmail() {
     const [password, setpassword] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState(false);
-    const navigate = useNavigate()
 
 
     const loginWithEmailID = async () => {
