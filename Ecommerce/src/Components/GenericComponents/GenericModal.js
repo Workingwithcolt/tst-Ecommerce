@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { getCartValue } from "../../Helper/helper";
 import CardRow from "./CardRow";
+import { useSelector } from "react-redux";
 
 export const GenericModal = () => {
-    const data = getCartValue()
+    const { cartItems, DatabaseItem } = useSelector((state) => state.cart)
     const navigate = useNavigate()
     return (
         <div className="flex items-center sm:justify-start md:justify-center">
@@ -12,9 +13,9 @@ export const GenericModal = () => {
                     <div className="p-3">
                         <div className=" scroll h-32 sm:w-60 overflow-y-scroll scroll-smooth focus:scroll-auto">
                             {
-                                data && data.length > 0
+                                cartItems && cartItems.length > 0
                                     ?
-                                    data.map(element => {
+                                    cartItems.map(element => {
                                         return (
                                             <CardRow name={element.name} value={"$" + `${element.price}`} />
                                         )
@@ -22,6 +23,15 @@ export const GenericModal = () => {
                                     : <p className="flex text-wrap justify-center text-md font-bold tracking-tight truncate text-gray-400 dark:text-gray-400">
                                         Go To CheckOut for Detail of Previous Cart Products
                                     </p>
+                            }
+                            {
+                                DatabaseItem && DatabaseItem.length > 0
+                                &&
+                                DatabaseItem.map(element => {
+                                    return (
+                                        <CardRow name={element.name} value={"$" + `${element.price}`} />
+                                    )
+                                })
                             }
                         </div>
                         <div className="flex-1 mt-4">

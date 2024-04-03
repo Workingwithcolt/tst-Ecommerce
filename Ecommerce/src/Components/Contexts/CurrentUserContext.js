@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { clearCart } from "../../Helper/helper";
 
 export const UserContext = createContext({});
 const SESSION_STORAGE_KEY_SCHOOL = "currentUser";
@@ -15,7 +16,7 @@ export function UserContextProvider({ children }) {
     }, [])
 
     const setCartItem = (element) => {
-        // clearCart()
+        clearCart()
         let cartItems = localStorage.getItem('cartItems')
         var parsedValue = undefined;
         var result = []

@@ -1,16 +1,19 @@
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../Auth"
-import { clearCart, getCartValue } from "../../Helper/helper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CART, endpoints } from "../../FirebaseHelpers/ApiInterface";
 import LoadingSpinner from "./LoadingSpinner";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import { RiSubtractFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { AddToDatabaseItem, clearCart } from "../../features/cart/cartSlice";
 
 export const CardDashBoard = () => {
     const { currentUserObject } = useContext(AuthContext);
-    const CartData = getCartValue()
+    const dispatch = useDispatch();
+    const [success, setSucess] = useState(false)
+    const { cartItems: CartData } = useSelector((state) => state.cart)
     const uid = currentUserObject.uid;
     const queryClient = useQueryClient()
 
@@ -18,12 +21,10 @@ export const CardDashBoard = () => {
         isloading: false,
         data: []
     })
+    console.log(CartData);
 
-    const InvalidateCart = async () => {
-        await queryClient.invalidateQueries({
-            predicate: (query) =>
-                query.queryKey.includes(CART)
-        })
+    const InvalidateCart = () => {
+        queryClient.invalidateQueries()
     }
 
     useEffect(() => {
@@ -33,22 +34,24 @@ export const CardDashBoard = () => {
                 data: []
             })
             let result = Promise.all(CartData?.map(async (element) => {
-                element.owner = uid;
-                await endpoints.Cart.addDocument(element);
+                await endpoints.Cart.addDocument({ ...element, owner: uid });
                 return element;
             }))
             setStatus({
                 isloading: false,
                 data: result
             })
-            clearCart()
+            InvalidateCart()
+            dispatch(clearCart())
         }
     }, [])
 
     const getCartElement = async () => {
         var databaseQuery = []
-        databaseQuery = [['owner', "==", uid]]
-        return await endpoints.Cart.getAllDocument(databaseQuery)
+        databaseQuery = [["owner", "==", uid]]
+        let result = await endpoints.Cart.getAllDocument(databaseQuery)
+        setSucess(true)
+        return result;
     }
 
     const AddQuanity = async (item) => {
@@ -56,8 +59,7 @@ export const CardDashBoard = () => {
             isloading: true,
             data: []
         })
-        item.quantity = item.quantity + 1
-        await endpoints.Cart.updateDocument(item.id, item);
+        await endpoints.Cart.updateDocument(item.id, { ...item, quantity: item.quantity + 1 });
         setStatus({
             isloading: false,
             data: []
@@ -70,11 +72,12 @@ export const CardDashBoard = () => {
             isloading: true,
             data: []
         })
-        item.quantity = item.quantity - 1
-        if (item.quantity <= 0) {
+        console.log(item);
+        if ((item.quantity - 1) <= 0) {
+            console.log("subtract");
             await endpoints.Cart.deleteDocument(`${item.id}`);
         } else {
-            await endpoints.Cart.updateDocument(item.id, item);
+            await endpoints.Cart.updateDocument(item.id, { ...item, quantity: item.quantity - 1 });
         }
         setStatus({
             isloading: false,
@@ -85,7 +88,7 @@ export const CardDashBoard = () => {
 
     const { data: CartFirebaseData, isloading } = useQuery({
         queryFn: async () => await getCartElement(),
-        queryKey: [uid, CART]
+        queryKey: [uid, CART],
     })
 
     const deleteItem = async (id) => {
@@ -106,11 +109,18 @@ export const CardDashBoard = () => {
         return (<LoadingSpinner />)
     }
 
+    if (CartFirebaseData) {
+        dispatch(AddToDatabaseItem(CartFirebaseData))
+    }
+
     return (
         <div className="relative overflow-x-auto">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
+                        <th scope="col" className="px-6 py-3">
+                            Product Image
+                        </th>
                         <th scope="col" className="px-6 py-3">
                             Product name
                         </th>
@@ -136,6 +146,10 @@ export const CardDashBoard = () => {
                         CartFirebaseData?.map(element => {
                             return (
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <img src={element.imageUrl}>
+                                        </img>
+                                    </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {element.name}
                                     </th>

@@ -7,6 +7,7 @@ import sneakers from "../../filles/sneakers.jpg"
 import jackets from "../../filles/jackets.jpg"
 import { ItemCard } from './ItemCard';
 import SHOP_DATA from '../../Helper/data';
+import { useSelector } from 'react-redux';
 
 const ProductArray = [
   {
@@ -31,7 +32,8 @@ const ProductArray = [
 
 export function Home() {
   const { currentUserAdmin } = useContext(UserContext);
-
+  const state = useSelector((state) => state.cart)
+  console.log(state);
   return (
     <section className="bg-gray-900 h-full flex justify-center items-center">
       <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">

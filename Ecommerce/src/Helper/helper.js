@@ -36,8 +36,6 @@ export const checkAssistant = (currentAcces) => {
 }
 
 
-
-
 export const blobToBase64 = async (blob) => {
     return new Promise((resolve, reject) => {
         var reader = new FileReader();
